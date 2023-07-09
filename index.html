@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book library</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/9.3.2/swiper-bundle.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./src/style/reset.css" />
+    <link rel="stylesheet" href="./src/style/variable.css" />
+    <link rel="stylesheet" href="./src/style/global.css" />
+    <link rel="stylesheet" href="./src/style/pages/home.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="general-header">
+      <div class="container">
+        <div class="header-content">
+          <a href="./index.html" class="logo"
+            ><img src="./src/assets/img/logo.png" alt="logo"
+          /></a>
+          <nav class="nav">
+            <ul class="nav-list">
+              <li><a href="">Ana səhifə</a></li>
+              <li><a href="">Kataloq</a></li>
+              <li><a href="">Haqqımızda</a></li>
+              <li><a href="">Əlaqə</a></li>
+            </ul>
+          </nav>
+          <div class="header-action">
+            <div class="search"><i class="fas fa-search"></i></div>
+            <div class="joinus-btn"><i class="fas fa-user"></i></div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="banner-section">
+        <div class="swiper banner-slider">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="container">
+                <div class="row align-items-center">
+                  <div class="col-lg-6">
+                    <div class="left">
+                      <div class="title">Yeni kitablar</div>
+                      <div class="text">
+                        Lorem ipsum dolor sit amet <br />consectetur adipisicing
+                        elit. Provident, mollitia?
+                      </div>
+                      <a href="" class="banner-btn"
+                        >daha ətraflı <i class="fas fa-arrow-right-long"></i
+                      ></a>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="right">
+                      <div class="img">
+                        <img
+                          src="./src/assets/img/slider1.png"
+                          alt=""
+                          class="img-fluid"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="container">
+                <div class="row align-items-center">
+                  <div class="col-lg-6">
+                    <div class="left">
+                      <div class="title">Yeni kitablar</div>
+                      <div class="text">
+                        Lorem ipsum dolor sit amet <br />consectetur adipisicing
+                        elit. Provident, mollitia?
+                      </div>
+                      <a href="" class="banner-btn"
+                        >daha ətraflı <i class="fas fa-arrow-right-long"></i
+                      ></a>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="right">
+                      <div class="img">
+                        <img
+                          src="./src/assets/img/slider2.png"
+                          alt=""
+                          class="img-fluid"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </section>
+
+      <section class="catalog-section">
+        <div class="container">
+          <div class="row">
+            <div class="heading">Kataloq</div>
+          </div>
+          <div class="row" id="categories"></div>
+        </div>
+      </section>
+      <div class="modal-overlay"></div>
+      <div class="join-us">
+        <div class="close-modal">
+          <img src="./src/assets/icon/close.svg" alt="close-icon" />
+        </div>
+        <form action="">
+          <div class="title">Join Us</div>
+          <div class="form-group">
+            <input type="text" id="fullName" placeholder="Full name" />
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" placeholder="Email" />
+          </div>
+          <div class="form-group">
+            <button class="join-us-btn" id="joinUsBtn">Join us</button>
+          </div>
+        </form>
+      </div>
+    </main>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+      import {
+        getAuth,
+        signOut,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+      import {
+        getDatabase,
+        push,
+        ref,
+        set,
+        get,
+      } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCin5NrbodrRIrnkjeJKC1uwVNWT9ohyUc",
+        authDomain: "fir-project-fd302.firebaseapp.com",
+        databaseURL:
+          "https://fir-project-fd302-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "fir-project-fd302",
+        storageBucket: "fir-project-fd302.appspot.com",
+        messagingSenderId: "119198830271",
+        appId: "1:119198830271:web:424054a214a2d2265ac00a",
+      };
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase();
+
+      let categories = document.getElementById("categories");
+      let fullName = document.getElementById("fullName");
+      let email = document.getElementById("email");
+      let joinUsBtn = document.getElementById("joinUsBtn");
+
+      const getCategory = () => {
+        get(ref(db, "categories/")).then((snapshot) => {
+          let categoriesData = snapshot.val();
+
+          let categoriesArr = Object.entries(categoriesData);
+          categoriesArr.map(
+            (category) =>
+              (categories.innerHTML += ` 
+                                <div class="col-lg-2 col-md-4 col-sm-6 catalog-item mb-3">
+                                   <div class="item">${category[1].categorie}</div>
+                                 </div>`)
+          );
+        });
+      };
+      const joinUsData = () => {
+        push(ref(db, "join-us/"), {
+          fullName:fullName.value,
+          email:email.value,
+        })
+          .then(() => {})
+          .catch((error) => console.log(error));
+      };
+
+      joinUsBtn.addEventListener("click", joinUsData);
+      document.addEventListener("DOMContentLoaded", getCategory);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/9.3.2/swiper-bundle.min.js"></script>
+    <script src="./src/js/slider.js"></script>
+    <script src="./src/js/modal.js"></script>
+    <script src="./src/js/main.js"></script>
+  </body>
+</html>
